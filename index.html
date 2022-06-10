@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script> <!-- 引入vue的cdn -->
+    
+</head>
+<body>
+    <div id="root"></div>
+    <script>
+        let app = Vue.createApp({//Vue.createApp代表創建一個vue實例 讓他叫app是為了之後方便用組件
+            data(){
+                return{
+                    inputValue:'',
+                    list:[]
+                }
+            },
+            methods:{ //函數要呼叫作用 放在methods
+                handleBtnClick(){
+                    this.list.push(this.inputValue);
+                    this.inputValue ='';
+                }
+            },
+            // 一個標籤的屬性如果想要跟數據綁定 就用v-bind
+            template:`<div>
+                 <input v-model="inputValue">
+                <button v-on:click="handleBtnClick"
+                        v-bind:title="inputValue">
+                    增加 
+                </button>
+                <ul> 
+                    <todo-item 
+                    v-for="(item,index) of list" 
+                    v-bind:content="item"
+                    v-bind:index="index">   
+                </ul>     
+                </div>`
+                // 上面掛載了content的屬性
+                //在Vue裡面要用事件 要用v-on來綁定
+        })//.mount('#root');//.mount('#root') 在div名稱=root上使用Vue
+        app.component('todo-item',{
+            props:['content','index'],//props代表調用外部在使用component裡的todo-item的時候 掛載在我身上的content的值
+            template:`<li>{{index}} -- {{content}}</li>`//接受到之後 就能用content的屬性值了
+        });
+        // mount要放在component之後 才能顯示出來 順序才是對的
+        app.mount('#root');//.mount('#root') 在div名稱=root上使用Vue
+    </script>
+</body>
+</html>
